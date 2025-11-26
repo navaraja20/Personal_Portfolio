@@ -20,6 +20,7 @@ export interface Repository {
   homepage: string | null
   stargazers_count: number
   forks_count: number
+  fork: boolean
   language: string | null
   languages_url: string
   topics: string[]
