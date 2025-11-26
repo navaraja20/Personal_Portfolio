@@ -120,7 +120,9 @@ export default function Skills() {
                   return (
                     <div
                       key={skill.name}
-                      ref={el => skillsRef.current[globalIndex] = el}
+                      ref={el => {
+                        skillsRef.current[globalIndex] = el
+                      }}
                     >
                       <div className="flex justify-between mb-2">
                         <span className="font-semibold">{skill.name}</span>
