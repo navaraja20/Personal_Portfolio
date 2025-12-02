@@ -12,7 +12,7 @@ export default function Footer() {
           {/* Brand */}
           <div>
             <h3 className="text-2xl font-gaming font-bold text-gradient mb-4">
-              NAVARAJA
+              NAVARAJA MANNEPALLI
             </h3>
             <p className="text-sm text-gray-400">
               ML Engineer | Data Engineer | Data Scientist

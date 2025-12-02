@@ -61,7 +61,7 @@ export default function Hero() {
             textShadow: '0 0 20px rgba(0, 240, 255, 0.5), 0 0 40px rgba(184, 0, 255, 0.3), 0 2px 4px rgba(0, 0, 0, 0.8)',
             filter: 'brightness(1.2) contrast(1.1)'
           }}>
-            NAVARAJA
+            NAVARAJA MANNEPALLI
           </span>
         </motion.h1>
 
