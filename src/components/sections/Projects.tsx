@@ -13,6 +13,7 @@ export default function Projects() {
   const { unlockAchievement } = useAchievements()
   const [projects, setProjects] = useState<Repository[]>([])
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
     if (inView) {
@@ -24,12 +25,15 @@ export default function Projects() {
     async function fetchProjects() {
       try {
         const repos = await getRepositories()
+        console.log('Fetched repositories:', repos)
         
         // Prioritize Employee-performance-prediction and filter out unwanted repos
         const prioritizedRepos = repos.filter(repo => 
           repo.name !== 'AWS-project1' && 
           repo.name !== 'navaraja20' // Filter out profile repo if exists
         )
+        
+        console.log('Filtered repositories:', prioritizedRepos)
         
         // Find Employee-performance-prediction and move it to the front
         const employeePerfIndex = prioritizedRepos.findIndex(
@@ -41,9 +45,12 @@ export default function Projects() {
           prioritizedRepos.unshift(employeePerfRepo)
         }
         
-        setProjects(prioritizedRepos.slice(0, 6)) // Show top 6 projects
+        const finalProjects = prioritizedRepos.slice(0, 6)
+        console.log('Final projects to display:', finalProjects)
+        setProjects(finalProjects) // Show top 6 projects
       } catch (error) {
         console.error('Error fetching projects:', error)
+        setError(error instanceof Error ? error.message : 'Failed to fetch projects')
       } finally {
         setLoading(false)
       }
@@ -65,6 +72,21 @@ export default function Projects() {
         {loading ? (
           <div className="flex justify-center items-center min-h-[400px]">
             <div className="loading-spinner" />
+          </div>
+        ) : projects.length === 0 ? (
+          <div className="text-center py-12">
+            <p className="text-gray-400 mb-4">
+              {error ? `Error: ${error}` : 'No projects found. Check console for errors.'}
+            </p>
+            <a
+              href="https://github.com/navaraja20?tab=repositories"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-primary inline-flex items-center gap-2"
+            >
+              <Github size={20} />
+              View All Projects on GitHub
+            </a>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -148,23 +170,25 @@ export default function Projects() {
           </div>
         )}
 
-        {/* View More Button */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={inView ? { opacity: 1 } : {}}
-          transition={{ delay: 0.8 }}
-          className="text-center mt-12"
-        >
-          <a
-            href="https://github.com/navaraja20?tab=repositories"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="btn-primary inline-flex items-center gap-2"
+        {/* View More Button - only show if projects loaded successfully */}
+        {!loading && projects.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={inView ? { opacity: 1 } : {}}
+            transition={{ delay: 0.8 }}
+            className="text-center mt-12"
           >
-            <Github size={20} />
-            View All Projects on GitHub
-          </a>
-        </motion.div>
+            <a
+              href="https://github.com/navaraja20?tab=repositories"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-primary inline-flex items-center gap-2"
+            >
+              <Github size={20} />
+              View All Projects on GitHub
+            </a>
+          </motion.div>
+        )}
       </div>
     </section>
   )

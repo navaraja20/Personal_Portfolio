@@ -2,9 +2,8 @@
 
 import { motion } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import { useAchievements } from '@/context/AchievementContext'
-import { getRepositories, getAllLanguages, getTopLanguages } from '@/services/github'
 import gsap from 'gsap'
 
 interface SkillData {
@@ -27,13 +26,12 @@ const skillsData: SkillData[] = [
   { name: 'Kubernetes', level: 78, category: 'Tools' },
   { name: 'Git', level: 92, category: 'Tools' },
   { name: 'Pandas', level: 94, category: 'Data Engineering' },
-  { name: 'NumPy', level: 92, category: 'Programming' },
+  { name: 'NumPy', level: 85, category: 'Programming' },
 ]
 
 export default function Skills() {
   const [ref, inView] = useInView({ threshold: 0.1, triggerOnce: true })
   const { unlockAchievement } = useAchievements()
-  const [githubLanguages, setGithubLanguages] = useState<Array<{ name: string; percentage: number }>>([])
   const skillsRef = useRef<(HTMLDivElement | null)[]>([])
 
   useEffect(() => {
@@ -41,20 +39,6 @@ export default function Skills() {
       unlockAchievement('view_skills')
     }
   }, [inView, unlockAchievement])
-
-  useEffect(() => {
-    async function fetchLanguages() {
-      try {
-        const repos = await getRepositories()
-        const languages = await getAllLanguages(repos)
-        const topLangs = getTopLanguages(languages, 8)
-        setGithubLanguages(topLangs)
-      } catch (error) {
-        console.error('Error fetching languages:', error)
-      }
-    }
-    fetchLanguages()
-  }, [])
 
   useEffect(() => {
     if (inView) {
@@ -143,70 +127,6 @@ export default function Skills() {
             </motion.div>
           ))}
         </div>
-
-        {/* GitHub Language Stats */}
-        {githubLanguages.length > 0 && (
-          <motion.div
-            initial={{ opacity: 0, y: 50 }}
-            animate={inView ? { opacity: 1, y: 0 } : {}}
-            transition={{ delay: 0.6 }}
-            className="gaming-card"
-          >
-            <h3 className="text-2xl font-gaming font-bold text-neon-cyan mb-6 text-center">
-              GitHub Language Distribution
-            </h3>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-              {githubLanguages.map((lang, index) => (
-                <motion.div
-                  key={lang.name}
-                  initial={{ opacity: 0, scale: 0 }}
-                  animate={inView ? { opacity: 1, scale: 1 } : {}}
-                  transition={{ delay: 0.7 + index * 0.05 }}
-                  className="text-center"
-                >
-                  <div className="relative w-24 h-24 mx-auto mb-3">
-                    <svg className="w-full h-full transform -rotate-90">
-                      <circle
-                        cx="48"
-                        cy="48"
-                        r="44"
-                        fill="none"
-                        stroke="rgba(255,255,255,0.1)"
-                        strokeWidth="8"
-                      />
-                      <motion.circle
-                        cx="48"
-                        cy="48"
-                        r="44"
-                        fill="none"
-                        stroke="url(#gradient)"
-                        strokeWidth="8"
-                        strokeDasharray={`${2 * Math.PI * 44}`}
-                        initial={{ strokeDashoffset: 2 * Math.PI * 44 }}
-                        animate={inView ? {
-                          strokeDashoffset: 2 * Math.PI * 44 * (1 - lang.percentage / 100)
-                        } : {}}
-                        transition={{ delay: 0.8 + index * 0.1, duration: 1.5, ease: 'easeOut' }}
-                      />
-                      <defs>
-                        <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                          <stop offset="0%" stopColor="#00f0ff" />
-                          <stop offset="100%" stopColor="#b800ff" />
-                        </linearGradient>
-                      </defs>
-                    </svg>
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <span className="text-xl font-bold text-neon-cyan">
-                        {lang.percentage.toFixed(0)}%
-                      </span>
-                    </div>
-                  </div>
-                  <p className="font-semibold">{lang.name}</p>
-                </motion.div>
-              ))}
-            </div>
-          </motion.div>
-        )}
       </div>
     </section>
   )

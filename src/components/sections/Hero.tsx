@@ -3,9 +3,9 @@
 import { motion } from 'framer-motion'
 import { useEffect, useState } from 'react'
 import { Download, Github, Linkedin, Mail, ChevronDown } from 'lucide-react'
-import Scene3D from '../Scene3D'
 import { useAchievements } from '@/context/AchievementContext'
 import { getXPLevel, calculateXP } from '@/lib/utils'
+import { AuroraTextEffect } from '@/components/effects/AuroraTextEffect'
 
 export default function Hero() {
   const [mounted, setMounted] = useState(false)
@@ -24,11 +24,8 @@ export default function Hero() {
 
   return (
     <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* 3D Background */}
-      <Scene3D />
-      
-      {/* Gradient Overlay */}
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-gaming-dark/50 to-gaming-dark -z-5" />
+      {/* Gradient Overlay for better text readability */}
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/30 to-black/50 -z-5" />
       
       {/* Scan Line Effect */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden -z-5">
@@ -51,19 +48,31 @@ export default function Hero() {
         </motion.div>
 
         {/* Main Title */}
-        <motion.h1
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
-          className="text-6xl md:text-8xl font-gaming font-black mb-6"
         >
-          <span className="block text-white" style={{ 
-            textShadow: '0 0 20px rgba(0, 240, 255, 0.5), 0 0 40px rgba(184, 0, 255, 0.3), 0 2px 4px rgba(0, 0, 0, 0.8)',
-            filter: 'brightness(1.2) contrast(1.1)'
-          }}>
-            NAVARAJA MANNEPALLI
-          </span>
-        </motion.h1>
+          <AuroraTextEffect
+            text="NAVARAJA MANNEPALLI"
+            className="bg-transparent mb-6"
+            fontSize="clamp(2rem, 8vw, 5rem)"
+            colors={{
+              first: "bg-neon-cyan",
+              second: "bg-neon-purple",
+              third: "bg-neon-pink",
+              fourth: "bg-neon-blue",
+            }}
+            blurAmount="blur-xl"
+            animationSpeed={{
+              border: 8,
+              first: 6,
+              second: 7,
+              third: 4,
+              fourth: 10,
+            }}
+          />
+        </motion.div>
 
         {/* Subtitle with Typing Effect */}
         <motion.div

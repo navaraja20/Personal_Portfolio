@@ -4,11 +4,24 @@ const GITHUB_API = 'https://api.github.com'
 const username = process.env.NEXT_PUBLIC_GITHUB_USERNAME || 'navaraja20'
 const token = process.env.NEXT_PUBLIC_GITHUB_TOKEN
 
+// Create headers object
+const getHeaders = () => {
+  if (token) {
+    console.log('Using GitHub token for authentication')
+    return {
+      Authorization: `token ${token}`,
+      Accept: 'application/vnd.github.v3+json'
+    }
+  }
+  console.log('No GitHub token found, using public API')
+  return {
+    Accept: 'application/vnd.github.v3+json'
+  }
+}
+
 const githubClient = axios.create({
   baseURL: GITHUB_API,
-  headers: token ? {
-    Authorization: `Bearer ${token}`,
-  } : {},
+  headers: getHeaders(),
 })
 
 export interface Repository {
@@ -72,6 +85,7 @@ export async function getUserProfile(): Promise<UserProfile> {
 
 export async function getRepositories(): Promise<Repository[]> {
   try {
+    console.log('Fetching repositories for user:', username)
     const { data } = await githubClient.get(`/users/${username}/repos`, {
       params: {
         sort: 'updated',
@@ -79,12 +93,18 @@ export async function getRepositories(): Promise<Repository[]> {
       },
     })
     
+    console.log('Successfully fetched', data.length, 'repositories')
+    
     // Filter out forks and sort by stars
     return data
       .filter((repo: Repository) => !repo.fork)
       .sort((a: Repository, b: Repository) => b.stargazers_count - a.stargazers_count)
   } catch (error) {
     console.error('Error fetching repositories:', error)
+    if (axios.isAxiosError(error)) {
+      console.error('Status:', error.response?.status)
+      console.error('Response:', error.response?.data)
+    }
     throw error
   }
 }
@@ -92,9 +112,7 @@ export async function getRepositories(): Promise<Repository[]> {
 export async function getRepositoryLanguages(languagesUrl: string): Promise<LanguageStats> {
   try {
     const { data } = await axios.get(languagesUrl, {
-      headers: token ? {
-        Authorization: `Bearer ${token}`,
-      } : {},
+      headers: getHeaders(),
     })
     return data
   } catch (error) {
