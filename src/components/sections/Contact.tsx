@@ -100,7 +100,7 @@ export default function Contact() {
                   <div>
                     <p className="text-sm text-gray-400">Email</p>
                     <a href="mailto:nava-raja.mannepalli@epita.fr" className="text-lg font-semibold hover:text-neon-cyan transition-colors">
-                      nava-raja.mannepalli@epita.fr
+                      mannepallinavaraja@gmail.com
                     </a>
                   </div>
                 </div>
