@@ -65,10 +65,10 @@ export default function About() {
             </div>
             <div className="space-y-4">
               <div className="border-l-2 border-neon-cyan pl-4">
-                <h4 className="font-bold text-lg">Master of Science - Computer Science</h4>
+                <h4 className="font-bold text-lg">Master of Science - Data Science & Analytics</h4>
                 <p className="text-neon-purple font-semibold">EPITA, France</p>
-                <p className="text-sm text-gray-400">2023 - 2025</p>
-                <p className="text-sm mt-2">Specializing in Machine Learning, Data Engineering, and Artificial Intelligence</p>
+                <p className="text-sm text-gray-400">2024 - 2026</p>
+                <p className="text-sm mt-2">Specializing in Machine Learning, Data Engineering,Artificial Intelligence</p>
               </div>
             </div>
           </motion.div>
