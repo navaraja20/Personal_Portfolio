@@ -4,8 +4,8 @@ import { ThemeProvider } from '@/components/ThemeProvider'
 import Navigation from '@/components/Navigation'
 import Footer from '@/components/Footer'
 import { AchievementProvider } from '@/context/AchievementContext'
-import ParticleOrbitEffect from '@/components/effects/ParticleOrbitEffect'
-import Galaxy from '@/components/effects/Galaxy'
+import Hyperspeed from '@/components/effects/Hyperspeed'
+import CursorCanvas from '@/components/CursorCanvas'
 
 export const metadata: Metadata = {
   title: 'Navaraja - ML Engineer | Data Engineer | Data Scientist',
@@ -35,35 +35,34 @@ export default function RootLayout({
       <body>
         <ThemeProvider>
           <AchievementProvider>
-            {/* Galaxy Background */}
-            <div className="fixed inset-0 w-full h-full -z-10">
-              <Galaxy
-                mouseRepulsion={true}
-                mouseInteraction={true}
-                density={1.2}
-                glowIntensity={0.6}
-                saturation={0.7}
-                hueShift={200}
-                twinkleIntensity={0.4}
-                rotationSpeed={0.02}
-                speed={0.8}
-                transparent={false}
+            <CursorCanvas />
+            <div className="fixed inset-0 -z-10">
+              <Hyperspeed
+                effectOptions={{
+                  distortion: 'turbulentDistortion',
+                  length: 400,
+                  roadWidth: 10,
+                  islandWidth: 2,
+                  lanesPerRoad: 3,
+                  fov: 90,
+                  fovSpeedUp: 150,
+                  speedUp: 2,
+                  carLightsFade: 0.4,
+                  totalSideLightSticks: 50,
+                  lightPairsPerRoadWay: 50,
+                  colors: {
+                    roadColor: 0x080808,
+                    islandColor: 0x0a0a0a,
+                    background: 0x000000,
+                    shoulderLines: 0x131318,
+                    brokenLines: 0x131318,
+                    leftCars: [0xd856bf, 0x6750a2, 0xc247ac],
+                    rightCars: [0x03b3c3, 0x0e5ea5, 0x324555],
+                    sticks: 0x03b3c3
+                  }
+                }}
               />
             </div>
-            
-            {/* Particle Cursor Effect */}
-            <ParticleOrbitEffect 
-              particleCount={30}
-              radius={80}
-              particleSpeed={0.02}
-              radiusScale={2}
-              intensity={1.2}
-              fadeOpacity={0.08}
-              colorRange={[180, 280]}
-              autoColors={true}
-              particleSize={3}
-            />
-            
             <Navigation />
             <main className="min-h-screen">
               {children}

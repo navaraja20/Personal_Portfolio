@@ -24,8 +24,8 @@ export default function Hero() {
 
   return (
     <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Gradient Overlay for better text readability */}
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/30 to-black/50 -z-5" />
+      {/* Gradient Overlay */}
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-gaming-dark/50 to-gaming-dark -z-5" />
       
       {/* Scan Line Effect */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden -z-5">
